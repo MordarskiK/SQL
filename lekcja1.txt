@@ -1,0 +1,23 @@
+zapytania SQL
+
+select nazwa		(wyświetl nazwę)
+select nazwa,cena	(wyśeitl nazwe i cene)
+from towary		(z tabeli towary)
+where cena<1		(gdzie cena<1)
+
+select {nazwa_kolumny/kolumn} 
+from {nazwa_tabeli} 
+where {warunek} nazwa kolumn na który wykonany jest warunek 
+(pozwala znaleźć odpowiednie rekordy)
+
+select .(to zostaje wyświetlone). from ... where .(w zależnośi od warunku).
+
+wgrać baze danych xampp
+
+
+
+wielkość liter ma znaczenie w porównaniach
+ułamki mają kropni nie przecinki
+
+SELECT cena from filmy WHERE rok_produkcji = 1984 order by cena desc limit 1
+
