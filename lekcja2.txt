@@ -1,0 +1,86 @@
+desc - od najwyższej do najniższej
+asc - od najniższej do najwyższej (domyślnie)
+
+select cena from filmy where rok_produkcji = 1984 order by cena desc limit 1
+
+* = all
+
+Typy zapytań:
+pełen odczyt - SELECT * from {tabela}
+selekcja - select * from {tabela} where {warunek}
+projekcja - select {kolumna} from {tabela}
+operacja mnogościowa - 
+połączenie -
+grupowanie -
+podzapytania - 
+
+kolejność klauzul w pojeceniach sql jest ściśle określona:
+SELECT -> FROM -> WHERE -> ORDER BY
+
+porządkowanie rekordów: select {kolumna} from {tabela} order by {kolumna1},{kolumna2}
+
+odczytaj z filmy rekordy które w kolumna cena posiadają wartość większą niż 9
+SELECT * from filmy WHERE cena > 9
+
+odzczytaj z tabeli filmy rekordy które w kolumnie tytul mają wartość Frantic
+SELECT * FROM filmy WHERE tytul='Frantic'; 
+
+odczytaj rekordy które w kolumnie rok_produkcji mają wartość 1984 lub 1986
+SELECT * FROM filmy WHERE rok_produkcji = 1984 OR rok_produkcji = 1986; 
+SELECT * FROM filmy WHERE rok_produkcji = 1984 || rok_produkcji = 1986;
+SELECT * FROM filmy WHERE rok_produkcji IN (1984,1986);
+
+odczytaj rekordy które w kolumna cena posiadają wartoś wiekszą niż 9 i rok_produkcji to 2004
+SELECT * FROM filmy WHERE cena>9 AND rok_produkcji=2004; 
+
+odzytaj rekordy filmów z przed roku 2000 kosztujących ponad 8 
+SELECT * FROM filmy WHERE rok_produkcji<2000 and cena>8; 
+
+odczytaj rekordy filmów których 1 litera to T
+SELECT * FROM filmy WHERE SUBSTRING(tytul,1,1)='T'; 
+SELECT * FROM filmy WHERE LEFT(tytul,1)='T'; 
+SELECT * FROM filmy WHERE tytul LIKE 'T%'; 
+SELECT * FROM filmy WHERE tytul REGEXP '^T.*'; 
+
+
+fnkcje wbudowane:
+ROUND() - zwraca wartość argumentu zaokrągloną do luiczby całkowitej lub do podanej liczby miejsc po przecinku
+LENGTH() - zwraca liczbę znaków tekstu podanego przez argument
+LOWER() - zwraca tekst podany jako argument, zamiejając wszystkie litery na małe
+UPPER() - zwraca tekst podany jako argument, zamiejając wszystkie litery na duże
+SUBSTRING() - zwraca fragment tekstu podanego jako argument - podaną liczbę znaków, począwszy od podanego znaku
+
+odczytaj rekordy gdzie zaokrąglona cena jest większa niz 8
+SELECT * FROM filmy WHERE ROUND(cena)>8; 
+
+odzczytaj rekordy gdzie długość tytułu jest większa niż 7
+SELECT * FROM filmy WHERE LENGTH(tytul)>7; 
+
+wyświetl kolumne z tytułami z namych liter
+SELECT LOWER(tytul) FROM filmy; 
+
+wyświetl kolumne z tytułami z dużych liter
+SELECT UPPER(tytul) FROM filmy; 
+
+wyświetl rekordy filmów których 2 litera to e
+SELECT * FROM `filmy` WHERE SUBSTRING(tytul,2,1)='e'; 
+
+
+Ograniczenie zbioru odczytu:
+SELECT * FROM {tabela} LIMIT {ile_rekordów_odczytać} offset {ile_rekordów_pominąć}
+
+odczytaj 3 pierwzse rekordy filmów alfabetycznie
+SELECT * FROM `filmy` ORDER BY tytul LIMIT 3; 
+
+wyświetl tylul i cene jednego filmu z roku 1984 o najwyższej cenie wyporzyczenia
+SELECT tytul,cena FROM `filmy` WHERE rok_produkcji=1984 ORDER BY cena DESC LIMIT 1; 
+
+wyszukaj cene z tabeli filmy 
+SELECT cena FROM filmy; 
+
+wyszukaj cene z tabeli filmy bez powtarzania cen
+SELECT DISTINCT cena FROM filmy; 
+
+wyświetl tylul i ceny wyporzyczeń filmów tak aby tytuly były prezentowane za pomocą wielkich liter 
+a ceny zostały powiększone o 23% VAT i zaokraglone do 2 miejsc op przecinku
+SELECT UPPER(tytul), ROUND(cena*1.23,2) FROM filmy; 
