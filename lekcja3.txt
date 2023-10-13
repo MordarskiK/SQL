@@ -1,0 +1,31 @@
+where cena between 5 and 8      {between x and y}
+imie ||""|| nazwisko            {imienazwisko => imie nazwisko}
+where nazwisko like "%ski"      {%ski to cos-ski }
+rok_produkcji in (1986,1988)    {rok_produkcji = 1986 albo 1988}
+
+1. wyświetl tytuły filmów wyprodukowanych w roku 1998 lub 1999:
+   SELECT tytul FROM `filmy` WHERE rok_produkcji in (1998,1999)
+   SELECT tytul FROM `filmy` WHERE rok_produkcji = 1998 OR rok_produkcji = 1999
+
+2. wyświetl tytul i cena wypożyczenia filmów, których cena wyporzyczenia większa niż 9zł. Wynik iporządkuj rosnąco według ceny:
+  SELECT tytul,cena FROM `filmy` WHERE cena > 9 ORDER by cena ASC; 
+
+3. wyświetl nazwiska klientów o imieniu 'Jan'
+  SELECT nazwisko FROM `klienci` WHERE imie = "Jan"; 
+  SELECT nazwisko FROM `klienci` WHERE imie like 'Jan'; 
+  SELECT nazwisko FROM `klienci` WHERE imie in ('Jan'); 
+
+4.  wypisz imie i nazwisko gdzie długość imienia jest większa niż długość nazwiska:
+  SELECT imie,nazwisko FROM klienci WHERE length(imie)>length(nazwisko);
+
+5. wypisz nazwisko aktorów gdzie imie to 'Arnold','Tom','Jodie'. Uporządkuj malejąco według nazwiska:
+  SELECT nazwisko FROM `aktorzy` WHERE imie in ('Arnold','Tom','Jodie') ORDER BY nazwisko DESC; 
+
+6. wyświetl id filmu których kopie są dostępne do wypożyczenia. Bez duplikatów i uporządkuj rosnąco według id
+  SELECT DISTINCT id_filmu FROM `kopie` WHERE czy_dostepna = 'T' ORDER BY id_filmu; 
+
+7. wyświetl id kopii gdzie data wyporzyczenia jest mięzdy '2005-07-15' i '2005-07-22'. Uporządkuj rosnąco według id kopii
+  SELECT DISTINCT id_kopii FROM `wypozyczenia` WHERE data_wypozyczenia BETWEEN '2005-07-15' and '2005-07-22' ORDER BY id_kopii;  
+
+8. wyświetl id i czas trwania wypożyczenia (w dniach) które zostały wyporzyczone na okres większy niż 1 dzień
+  SELECT id_kopii,data_zwrotu - data_wypozyczenia as czas FROM `wypozyczenia` WHERE data_zwrotu - data_wypozyczenia > 1;   
