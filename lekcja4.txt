@@ -1,0 +1,98 @@
+where cena between 5 and 9 - cena międz 5 a 9
+imie || " " || nazwisko - wypisuje "imie nazwisko" zamiast "imienazwisko"
+where nazwisko like "%ski" - na końcu ski
+rok_produkcji in (1986, 1988)  - wyprodukowane w 1986 i 1988
+
+
+zd1
+SELECT tytul from filmy where rok_produkcji BETWEEN 1998 and 1999;
+SELECT tytul from filmy where rok_produkcji in (1998,1999)
+SELECT tytul from filmy where rok_produkcji=1998 or rok_produkcji=1999
+
+zd2
+SELECT tytul,cena from filmy where cena > 9 ORDER by cena ASC; 
+
+zd3
+SELECT nazwisko from klienci where imie="Jan"; 
+SELECT nazwisko from klienci where imie like "Jan"; 
+SELECT nazwisko from klienci where imie in ("Jan");
+ 
+zd4
+SELECT imie,nazwisko from klienci where LENGTH(imie)>LENGTH(nazwisko); 
+
+zd5
+SELECT nazwisko from aktorzy where imie in ("Arnold","Tom","Jodie") ORDER by nazwisko DESC; 
+
+zad6
+SELECT DISTINCT id_filmu from kopie where czy_dostepna="T" order by id_filmu; 
+
+zd7
+SELECT DISTINCT id_kopii from wypozyczenia where data_wypozyczenia between '2005-07-15' and '2005-07-22' ORDER by id_kopii; 
+
+zd8
+wyswietl czas wyporzyczenia i id kopii z wyporzyczenia gdfziene wyporzyczne jest większe od 1
+SELECT id_kopii, data_zwrotu - data_wypozyczenia as czas from wypozyczenia where data_zwrotu - data_wypozyczenia > 1; 
+---------------------------------------------------------------------------------------------------------------------------------------------------
+zd9 
+wyświetl napis 1 litera imienia . nazwisko aktorów
+SELECT Concat(LEFT(imie,1),+'. ',+nazwisko) as aktorzy FROM aktorzy; 
+ ...          substring(imie,1,1),'.'.nazwisko as ...
+zd10
+wypisz filmy z liczbą rosnącą SELECT tytul FROM filmy order by LENGTH(tytul); 
+SELECT tytul FROM filmy order by LENGTH(tytul); 
+
+zd11
+tytul i cena 3 najnowszych filmów
+SELECT tytul, cena FROM filmy ORDER by rok_produkcji DESC LIMIT 3; 
+
+zd12
+wyświetl imie 1 litere imienia i ostatnia w kolimnach imie pierwsza ostatnia
+SELECT imie, LEFT(imie,1) as 'pierwsza', RIGHT(imie,1) as 'ostatnia' FROM klienci; 
+
+zd13
+imie piersza i ostatnia litera jest taka sama nie odróznia małej od dużej
+SELECT imie FROM klienci where LEFT(imie,1) = RIGHT(imie,1); 
+SELECT DISTINCT imie FROM klienci where substring(lower(imie),1,1) = substring(lower(imie),length(imie),1); 
+
+zd14
+tytul gdzie przed ostatnia litera to 'o' 
+SELECT tytul FROM filmy where substring(tytul,-2,1)="o"; 
+
+zd15
+wypisz imie.nazwisko@zsti.pl
+SELECT concat(lower(imie),'.',+lower(nazwisko),'@zsti.pl') as email FROM klienci; 
+
+-------------------------------------------
+połączenie tabeli  => połączenie kartezjańskie => każdy rekord jednaj tabeli jest scalany z każdym rekordem innej tabeli (każdy z każdym)
+a) select * from tabela1 cross join tabela2  
+
+                   => połączenie naturalne => rekordy są scalane jeśli posiadają jednakowe wartości w jednakowo nazwanych kolumnach (te same kolumny [klucze obce])
+b) select * from tabela1 natural join tabela2 
+
+                   => połączenie w oparciu o warunek poączeniowy => rekordy są scalane ze względu na warunek logiczny
+c) select * from tabela1 join tabela2 on (warunek bez wer)
+select * from filmy join kopie on kopie.id_filmu=filmy.id_filmu; 
+select * from filmy join kopie on cena>8; 
+
+                   => połączenie zwrotne => rekordy tabeli są łączone z rekordami tej samej tabeli
+d) select * from tabela1 as t1 join tabela2 as t2 on warunek 
+
+                   => połączenie prawo stronne => Łączone są najpierw wewnętrznie dwa zbiory (INNER JOIN), na koniec dodawane są wszystkie niedopasowane elementy tabeli po PRAWEJ stronie operatora JOIN.
+e)SELECT * FROM table1 RIGHT JOIN table2 ON warunek
+SELECT * FROM filmy RIGHT JOIN kopie ON filmy.id_filmu=kopie.id_filmu; 
+SELECT filmy.id_filmu, kopie.id_kopii FROM filmy RIGHT JOIN kopie ON kopie.id_filmu=filmy.id_filmu; 
+SELECT filmy.tytul, kopie.id_filmu, kopie.czy_dostepna FROM filmy RIGHT JOIN kopie ON filmy.id_filmu=kopie.id_filmu; 
+                   => połączenie lewostronne => Postępujemy identycznie jak w INNER JOIN. Na koniec uzupełniamy zbiór wynikowy o wszystkie elementy tabeli stojącej po LEWEJ stronie operatora JOIN
+f)SELECT FROM table1 LEFT JOIN table2 ON warunek
+SELECT * FROM filmy left JOIN kopie ON filmy.id_filmu=kopie.id_filmu; 
+SELECT filmy.tytul, kopie.id_filmu, kopie.czy_dostepna FROM filmy LEFT JOIN kopie ON filmy.id_filmu=kopie.id_filmu;
+SELECT filmy.id_filmu, kopie.id_kopii FROM filmy left JOIN kopie ON kopie.id_filmu=filmy.id_filmu;
+
+                   => innerjoin => Tabela wynikowa zawierać będzie tylko takie elementy, dla których warunki złączenia wewnętrznego będą spełnione Klauzula FROM wraz z warunkami określonymi w ON jest pierwszym miejscem filtrowania rekordów. 
+g) SELECT * FROM tab1 INNER JOIN tab2 ON warunek
+SELECT * FROM filmy INNER JOIN kopie ON filmy.id_filmu=kopie.id_filmu; 
+SELECT cena, rok_produkcji, czy_dostepna FROM filmy INNER JOIN kopie ON filmy.id_filmu=kopie.id_filmu; 
+SELECT cena, rok_produkcji, czy_dostepna FROM filmy INNER JOIN kopie ON filmy.rok_produkcji>1999
+
+1) do pozostałych połączeń napis definicje w języku polskim sql i 3 przykłady
+2) przerób używając aliasów z .
