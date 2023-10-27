@@ -1,0 +1,47 @@
+zad 16
+Dla każdej kopii wyświetl identyfikator i tytuł azpisanego na niej filmu. Wynik uporządkuj według indetyfikatorów kopii
+SELECT kopie.id_kopii,filmy.tytul FROM `kopie` INNER JOIN `filmy` ON kopie.id_filmu=filmy.id_filmu ORDER BY kopie.id_kopii; 
+
+zad 17
+tytułu filmów których kopie są dostępne wyeliminuj duplikaty
+SELECT DISTINCT filmy.tytul FROM `filmy` JOIN `kopie` ON kopie.id_filmu=filmy.id_filmu WHERE kopie.czy_dostepna="T" ORDER BY filmy.tytul; 
+
+zad 18
+identyfikatory kopii filmów z 1984r.
+SELECT kopie.id_kopii FROM `kopie` JOIN `filmy` ON kopie.id_filmu=filmy.id_filmu WHERE filmy.rok_produkcji = 1984; 
+
+zad 19
+data wyoprzyczenia, data zwrotu, nawisko klienta który dokonał wypożyczenia
+SELECT wypozyczenia.data_wypozyczenia,wypozyczenia.data_zwrotu,klienci.nazwisko FROM wypozyczenia JOIN klienci ON wypozyczenia.id_klienta=klienci.id_klienta; 
+
+zad 20
+nazwisko klienta i tytul filmu wypożyczonego przez klienta
+SELECT klienci.nazwisko,filmy.tytul FROM wypozyczenia JOIN klienci ON klienci.id_klienta=wypozyczenia.id_klienta JOIN kopie on wypozyczenia.id_kopii=kopie.id_kopii JOIN filmy ON filmy.id_filmu=kopie.id_filmu; 
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+zad 1
+tytul i rok produkcji filmów wypożyczonych przez Kowalski
+SELECT filmy.tytul as "T",filmy.rok_produkcji as "r_p" FROM filmy JOIN kopie ON filmy.id_filmu = kopie.id_filmu JOIN wypozyczenia ON kopie.id_kopii=wypozyczenia.id_kopii JOIN klienci ON klienci.id_klienta = wypozyczenia.id_klienta WHERE klienci.nazwisko LIKE "Kowalski"; 
+
+zad 2
+nazwisko klienta kóry dokonał pierwszego wypożyczenia
+SELECT klienci.nazwisko FROM klienci JOIN wypozyczenia ON klienci.id_klienta = wypozyczenia.id_klienta ORDER BY wypozyczenia.data_wypozyczenia LIMIT 1; 
+
+zad 3
+nazwisko aktora z filmu "Terminator"
+SELECT aktorzy.nazwisko FROM aktorzy JOIN obsada ON aktorzy.id_aktora = obsada.id_aktora JOIN filmy ON obsada.id_filmu=filmy.id_filmu WHERE filmy.tytul LIKE "Terminator"; 
+
+zad 4
+tytuł filmu w którym zagrał aktor o nazwisku "De Niro"
+SELECT filmy.tytul FROM filmy JOIN obsada ON obsada.id_filmu = filmy.id_filmu JOIN aktorzy ON obsada.id_aktora = aktorzy.id_aktora WHERE aktorzy.nazwisko like "De Niro"; 
+
+zad 5
+tytul filmu najdłuzej wyporzyczonego
+SELECT filmy.tytul FROM filmy JOIN kopie ON kopie.id_filmu = filmy.id_filmu JOIN wypozyczenia ON wypozyczenia.id_kopii = kopie.id_kopii ORDER BY wypozyczenia.data_zwrotu - wypozyczenia.data_wypozyczenia DESC LIMIT 1; 
+
+zad 6
+nazwiska klientów którzy wyporzyczyli między '2005-07-15' a '2005-07-20'
+SELECT DISTINCT klienci.nazwisko FROM klienci JOIN wypozyczenia ON wypozyczenia.id_klienta = klienci.id_klienta WHERE wypozyczenia.data_wypozyczenia>'2005-07-15' AND wypozyczenia.data_wypozyczenia < '2005-07-20'; 
+
+
