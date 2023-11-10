@@ -1,0 +1,98 @@
+zad 7 
+tytuły filmów wyporzyczonych pomiędzy '2005-07-15' a '2005-07-25'
+
+SELECT DISTINCT filmy.tytul FROM `filmy` 
+JOIN kopie ON filmy.id_filmu=kopie.id_filmu 
+JOIN wypozyczenia ON kopie.id_kopii=wypozyczenia.id_kopii
+WHERE wypozyczenia.data_wypozyczenia BETWEEN '2005-07-15' and '2005-07-25'
+ORDER BY filmy.tytul
+
+zad 8
+dla klientów o tym samym imieniu co aktor wyświetl
+wspólne imie, nazwisko klienta, nazwisko aktora
+
+SELECT klienci.imie,klienci.nazwisko,aktorzy.nazwisko FROM klienci 
+JOIN aktorzy ON klienci.imie=aktorzy.imie
+ORDER BY klienci.imie
+
+--------------------------------------------------------------------
+Operatory zbiorowe:
+UNION - suma zbiorów bez powtórzeń
+UNION ALL - suma zbiorów całych (mogą być powtórzenia)
+EXCEPT - usuwanie powtarzających się elementów
+INTERSECT - tylko elementy które się powtarzają
+
+
+zad 1
+wspólna lista nazwisk klientów i aktorów uporządkowane alfabetycznie
+
+SELECT klienci.nazwisko FROM klienci 
+UNION
+SELECT aktorzy.nazwisko FROM aktorzy  
+ORDER BY `nazwisko` ASC
+
+zad 2
+tytuły filmóm w których razen zagrali 'De Niro' i 'Reno'
+
+SELECT filmy.tytul FROM filmy 
+JOIN obsada ON filmy.id_filmu=obsada.id_filmu
+JOIN aktorzy ON obsada.id_aktora=aktorzy.id_aktora
+WHERE aktorzy.nazwisko='De Niro'
+INTERSECT
+SELECT filmy.tytul FROM filmy 
+JOIN obsada ON filmy.id_filmu=obsada.id_filmu
+JOIN aktorzy ON obsada.id_aktora=aktorzy.id_aktora
+WHERE aktorzy.nazwisko='Reno'
+
+zad 3
+tytuł filmu wyporzyczonego przez klienta o nazwisku 'Kowalski' jak i 'Nowak'
+
+SELECT filmy.tytul FROM filmy 
+JOIN kopie ON filmy.id_filmu=kopie.id_filmu
+JOIN wypozyczenia ON kopie.id_kopii=wypozyczenia.id_kopii
+JOIN klienci ON wypozyczenia.id_klienta=klienci.id_klienta
+WHERE klienci.nazwisko='Kowalski'
+INTERSECT
+SELECT filmy.tytul FROM filmy 
+JOIN kopie ON filmy.id_filmu=kopie.id_filmu
+JOIN wypozyczenia ON kopie.id_kopii=wypozyczenia.id_kopii
+JOIN klienci ON wypozyczenia.id_klienta=klienci.id_klienta
+WHERE klienci.nazwisko='Nowak'
+
+zad 4
+filmy które wyporzyczył kowalki bez wyporzyczonych przez nowaka
+
+SELECT filmy.tytul FROM filmy 
+JOIN kopie ON filmy.id_filmu=kopie.id_filmu
+JOIN wypozyczenia ON kopie.id_kopii=wypozyczenia.id_kopii
+JOIN klienci ON wypozyczenia.id_klienta=klienci.id_klienta
+WHERE klienci.nazwisko='Kowalski'
+except
+SELECT filmy.tytul FROM filmy 
+JOIN kopie ON filmy.id_filmu=kopie.id_filmu
+JOIN wypozyczenia ON kopie.id_kopii=wypozyczenia.id_kopii
+JOIN klienci ON wypozyczenia.id_klienta=klienci.id_klienta
+WHERE klienci.nazwisko='Nowak'
+
+
+zad 5
+aktorzy filmów terminator którzy nie grali w gh
+
+SELECT aktorzy.nazwisko FROM aktorzy 
+JOIN obsada ON aktorzy.id_aktora=obsada.id_aktora
+JOIN filmy on obsada.id_filmu = filmy.id_filmu
+WHERE filmy.tytul='Terminator'
+except
+SELECT aktorzy.nazwisko FROM aktorzy 
+JOIN obsada ON aktorzy.id_aktora=obsada.id_aktora
+JOIN filmy on obsada.id_filmu = filmy.id_filmu
+WHERE filmy.tytul='Ghostbuters'
+
+
+
+
+
+
+
+
+
