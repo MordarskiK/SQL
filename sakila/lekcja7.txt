@@ -52,7 +52,7 @@ ORDER BY rental.rental_date DESC LIMIT 1;
 
 
 10.
-Wyświetl imie i nazwisko aktora oraz tytuł filmu pierwszego wyporzyczonego filmu. 
+Wyświetl imie i nazwisko aktora oraz tytuł filmu wyporzyczonego jako pierwszego. 
 
 SELECT actor.first_name,actor.last_name,film.title FROM actor
 JOIN film_actor ON actor.actor_id=film_actor.actor_id
