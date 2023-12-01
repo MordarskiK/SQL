@@ -1,0 +1,67 @@
+ZAINSTALOWAĆ workbench sql
+  
+SELECT * FROM film order by title;
+SELECT length('Paweł');
+SELECT title, length(title) from film order by title;
+SELECT length('żółty');                                                                         polskie znaki mają inną długość zamiast 1 to 2
+SELECT char_length('żółty');                                                                       tu wypisze dobrze
+  
+SELECT title, left(title,3) from film;
+SELECT title, mid(title,5,7) from film;                                                                 wypisuje litery z środkka od literey z nr 5 do 7
+  
+SELECT concat(title,'/',release_year) from film;                                              (wypiszuje, co, chcemy)
+SELECT concat_ws('-',title,release_year) from film;                                               ('łączy przeez', co , z czym)
+
+SELECT locate('finger','goldfinger') from film where title like "%finger%";                   szukanie miejsca z finger i goldfinger w tabveli
+SELECT locate('T',title) from film where title like '%T%'; szukanie 'T' w tabeli
+
+SELECT title, reverse(title) from film;
+
+działaia
+SELECT 2+2,5-2,3*8,8/4,10/3,pow(2,3),7%3;
+SELECT abs(3), abs(-3);                                                                       |-3|
+SELECT conv(21,10,2);                                                                     z sys 10 na 2 liczba 21
+SELECT sign(-3), sign(3);                                                                 jaki znak
+SELECT round(pi(),2);                                                                   zaokrągla pi
+SELECT truncate(3.43245453545,2);                                                       obcinanie liczb po przecinku
+SELECT ceil(1.124);                                                                       jesli większe od .0 zaokeągli w góre
+SELECT floor(1.124);                                                                    obenie po przecinku
+SELECT rand(2.345435);                                                                   random liczby
+
+
+  funkcja daty i czasu 
+  SELECT now();                                                                        czas teraz        która sdzybsza (na sprawdzian)
+SELECT CURRENT_TIMESTAMP();                                                             czas teraz unix
+  SELECT unix_timestamp();                                                                 czas podany w sekundach
+SELECT dayname(now());                                                                      dzien tygodnia
+  SELECT month(now()), monthname(now());                                                     miesiąc nr i nazwa
+SELECT dayofmonth(now()), dayofweek(now()), dayofyear(now());                                jaki jest dzień miesiąca tygodnia i roku w liczbach
+SELECT time_to_sec('00:15:00');                              900
+  SELECT addtime('01:00:02','01:42:11');                                                      dodaje czas
+  SELECT subtime('01:00:02','01:42:11');                                                       odejmyje czas
+SELECT adddate(now(), INTERVAL 55 DAY);                                                         55 dni dalej
+SELECT subdate(now(), INTERVAL 55 DAY);                                                          55 dani wcześniej
+
+3 zapytania 1 data i czas 1 join
+
+SELECT dayname(rental.rental_date), monthname(rental.rental_date),year(rental.rental_date) FROM rental;
+SELECT film.title as 'tytuł', dayname(rental.rental_date) as 'dzień wyporzyczenia', monthname(rental.rental_date) as 'miesiąc wyporzyczenia' FROM rental join inventory on inventory.inventory_id = rental.inventory_id join film on film.film_id = inventory.film_id where film.title like '%h%';
+SELECT film.title as 'tytuł', dayofmonth(rental.return_date), dayofweek(rental.return_date), dayofyear(rental.return_date) FROM rental join inventory on inventory.inventory_id = rental.inventory_id join film on film.film_id = inventory.film_id join customer on customer.customer_id= rental.customer_id join address on address.address_id=customer.address_id join city on city.city_id=address.city_id join country on country.country_id = city.country_id where country like 'Brazil';
+
+
+finkcje agregujące 
+
+select count(*) from payment
+select count(*), min(amount), max(amount), sum(amount),avg(amount) from payment                    ile zapłacił klient
+select count(*), count(address2) from address                                   nie zlicza null
+std()                                                                                         odchylenie standardowe
+
+ zapytanie z funkcji agregujących i join
+SELECT sum(payment.amount) as 'łączne wydatki', round(AVG(payment.amount),2) as 'średnia wydatków zaokrąglone', customer.first_name,customer.last_name from payment join customer on customer.customer_id = payment.customer_id where customer.last_name like 'BARBEE';
+SELECT count(DISTINCT district) from address;                                                             zlicza różne dystrykty
+SELECT district,count(*) as licznik from address group by district order by licznik desc;                  grupa dystryktów sortowanych przez liczbe rekordów ile jest w grupie
+SELECT GROUP_CONCAT(address) from address where district='Texas';                                            sklejenie całego adresu w grupe 
+SELECT GROUP_CONCAT(address SEPARATOR ' ; ') from address where district='Texas';                              separuje grupe
+SELECT district, GROUP_CONCAT(address order by district SEPARATOR ' ; ') from address GROUP by district;        robi sam nw co
+
+zrobić 1 z join group by group_concat na 5 lini
