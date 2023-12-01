@@ -1,0 +1,155 @@
+1. 
+SELECT title, release_year, rental_rate, replacement_cost FROM film 
+ORDER BY replacement_cost DESC, title;
+
+2.
+SELECT title, release_year, replacement_cost, rental_rate FROM film 
+ORDER BY replacement_cost DESC, rental_rate ASC, title ASC;
+
+3. 
+SELECT title, description, rating FROM film 
+WHERE rating IN ('G','PG')
+order BY rating;
+
+4. 
+SELECT first_name, last_name FROM customer
+WHERE LEFT(last_name,1) BETWEEN 'D' AND 'E'
+order BY last_name;
+
+5.
+SELECT title from film
+WHERE title like '___a%'  (_=ilość miejsc przed a)
+
+6.
+SELECT title from film 
+WHERE title REGEXP '^[a-e]';  (filmy od a do e    ^ oznacza pokolei)
+
+7.
+SELECT title from film 
+WHERE title REGEXP '^.[a-e]';  (filmy od a do e na 2 pozycji)
+
+8.
+SELECT title from film
+WHERE title REGEXP 'w$'  (kończy się na w)
+
+9. 
+SELECT title from film
+WHERE title REGEXP 'a.c'  (a coś c)
+
+10.
+SELECT title from film
+WHERE title REGEXP '[[.~.]]'           NOPE
+WHERE title REGEXP '[[.tilde.]]'       NOPE
+WHERE title REGEXP '[[.apostrophe.]]'  NOPE
+WHERE title REGEXP '[[:space:]]'       YES
+
+11.
+SELECT title from film
+WHERE title REGEXP '^[^a-x]'   (wszytkie które nie są od a do x)
+
+WHERE title REGEXP '^[^a.x]'   (wszytkie które nie zaczynają się od a lub x)
+
+WHERE title RLIKE'^[^a.x]'     (to samo to powyżej)
+
+zad 6.
+Stwórz zapytanie sortujące i podaj defnicje zależności pierwszeństwa w sortowaniu
+
+SELECT title, release_year, replacement_cost, rental_rate FROM film 
+WHERE release_year > 2000 and rental_rate > 1
+ORDER BY release_year DESC, title ASC, rental_rate DESC;
+
+Zależność pierwszeństwa w sortowaniu zależy od pierwszeństwa zapisu po ORDER BY 
+
+zad 7.
+Stwórz zapytanie przetestuj w SQL warunki wielekrotnie złożone (or, and) 
+tj. wiele warunków w jednym zapytaniu korzystaj z nawiasów.
+NAPISZ CO MA PIERWSZEŃSTWO OR CZY AND?
+
+SELECT title, release_year, replacement_cost, rental_rate FROM film 
+WHERE release_year > 2000 and rental_rate BETWEEN 1 and 3 OR LENGTH(title)>12
+ORDER BY release_year DESC, title ASC, rental_rate DESC limit 20;
+
+Najpierw uwzględni 2 argument w OR a następnie AND
+
+zad 8.
+Stwórz zapytanie przetestuj w SQL warunki wielekrotnie złożone (or, and) 
+tj. wiele warunków w jednym zapytaniu używając LIKE oraz IN
+
+SELECT title, description, rating FROM film 
+WHERE rating IN ('G','PG') and title LIKE '%EL%'
+order BY rating;
+
+zad 9.
+Stwórz zapytanie używając BETWEEN i RIGHT() i kilku funkcji wbudowanych
+
+SELECT first_name, last_name FROM customer
+WHERE LEFT(first_name,1)=RIGHT(last_name,1) and length(last_name) BETWEEN 5 AND 9
+order BY last_name;
+
+zad 10.
+Stwórz zapytanie urzywając _% dodaj znak < albo > jeśli to liczby lub kunkcje jeśli znaki
+
+SELECT title from film
+WHERE title like '___a%' and length(title)<10;
+
+zad 11.
+zapytanie złozone używając z REGEXP
+
+SELECT title, rental_rate from film
+WHERE title REGEXP '^.[a-e]' and rental_rate REGEXP '^[0-3]'
+ORDER BY rental_rate;
+
+zad 12.
+zapytanie urzywające 'w$', 'a.c' i join
+
+SELECT film.title,actor.last_name from film
+JOIN film_actor ON film.film_id=film_actor.film_id
+JOIN actor ON actor.actor_id=film_actor.actor_id
+WHERE film.title REGEXP 'a.c' and actor.last_name REGEXP 'a$'
+
+zad 13.
+zapyranie urzywająć RLIKE '^[^a.x]' oraz join
+
+SELECT DISTINCT film.title, actor.last_name from film
+JOIN film_actor ON film.film_id=film_actor.film_id
+JOIN actor ON actor.actor_id=film_actor.actor_id
+WHERE title RLIKE'^[^b.f]' and actor.last_name RLIKE '^[^f.m]'
+
+zad 14.
+połącz jak najwięcej rzeczy z lekcji
+
+SELECT film.title,actor.first_name, actor.last_name from film
+JOIN film_actor ON film.film_id=film_actor.film_id
+JOIN actor ON actor.actor_id=film_actor.actor_id
+JOIN inventory ON inventory.film_id=film.film_id
+JOIN rental ON rental.inventory_id=inventory.inventory_id
+WHERE title RLIKE'^[^a.t]' and actor.last_name RLIKE '^[^l.m]' and actor.first_name REGEXP 'T$' 
+
+
+  1. zawsze wpisuj select
+
+INSERT INTO actor VALUES(201, 'Henry','Cavill','2023-12-01 13:46:20')
+
+SELECT * FROM actor WHERE actor_id>200
+
+DELETE FROM actor WHERE actor.actor_id > 200
+
+  2. przy delete zawsze dawaj warunek
+
+DESCRIBE actor;
+
+INSERT INTO actor(first_name,last_name) VALUES('Jason','Mamoa');
+
+INSERT INTO actor(first_name,last_name) VALUES('Ben','Affleck');
+
+UPDATE actor SET first_name = 'Bruce' WHERE actor_id=203;
+
+
+
+
+
+
+
+
+
+
