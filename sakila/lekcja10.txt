@@ -1,0 +1,64 @@
+1.16
+select customer.first_name,customer.last_name, customer.active from customer join store on store.store_id=customer.store_id where store.store_id=2 and customer.active=0;
+2.17
+select film.title from film where film.replacement_cost BETWEEN 25 and 30 order by film.rental_rate limit 100;
+
+3.18
+select * from country where country_id=76;
+update country set country = "Polska" where country_id=76;
+
+4.19
+insert into city values('','Gliwice',76,'')
+
+----------------
+  create database liczone;
+create table liczby(
+  a INT,
+  b INT,
+  c FLOAT,
+  d FLOAT,
+  e DOUBLE,
+  f DOUBLE,
+  g decimal(4,2),
+  h DECIMAL(4,2));
+
+insert into liczby values(1, 2, 1.1, 2.2, 1.1, 2.2, 1.1, 2.2);
+SELECT a+b, c+d, e+f, g+h, a+b<3, c+d=3.30, e+f=3.3, g+h=3.3 from liczby
+
+
+------liczby----------------
+int                                                4 dłługość od -2147483...
+float 4 długość                                    
+double 8 długość
+decimal (m,d) zalis dla m i ilość miejsc 
+------teksty--------------
+char                                               wielkośść 255 automatycznie uzupełnia łańcuch do 255
+varchar                                            wielkość 255 zapisuje info o długości łańcucha znaków
+co to typ znakowy tekst
+text                                                Maksymalna długość wynosi 2.147.483.647 znaków.
+enum                                                1-65 535  wartości     tablica w polu może znaleźć się jeden jej element
+set                                                 1-64 wartości           tablica w polu może znaleźć się kilka z jej elementów
+-------obrazy------------
+tinyblob                                            do 255 b   automatycznie uzupełnia łańcuch 
+longblob                                            do 4GB
+-------daty-------------
+date np 2015-03-15                                 format rrrr-mm-dd
+datetime                                            format rrrr-mm-dd  hh:mm:ss
+timestamp                                           dodanie daty z systemu
+time                                                 format hh:mm:ss
+year                                                 format    RRRR
+
+
+
+create database magazyn;
+create table zapas(
+id serial, 
+nazwa varchar(100),
+stan enum('wysoki','sredni','niski'));
+insert into zapas (nazwa , stan) values('mleko','wysoki');
+insert into zapas (nazwa , stan) values('ser','sredni');
+insert into zapas (nazwa , stan) values('jogurt','niski');
+insert into zapas (nazwa , stan) values('kefir','wysoki');
+
+insert into zapas (nazwa , stan) values('kefir',3);                          daje 3 argument
+delete from zapas where id=6;
