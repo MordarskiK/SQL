@@ -1,0 +1,76 @@
+zapytania sql dokonujące agregacji - tzw zapytania agregujące  posługują się trzema ważnymi elementami składniowymi:
+- klauzulą GROUP BY wskazującą sposób podziału rekordów tabeli na tzw grupy
+- funkcjami grupowymi SQL które umożliwiaja wylicznei sum, średnich, odchyleń, minimów, maksimów, itd. dla każdej grupy
+- klauzulą HAVING umożliwiają odrzucenie grupy nie posiadającej podanych danych
+
+sum() suma wartości podanej kolumny we wszystkich rekordach
+avg() średnia wartości podanej kolumny we wszystkich rekordach
+min() minimalna wartości podanej kolumny we wszystkich rekordach
+max() maksymalna wartości podanej kolumny we wszystkich rekordach
+count(*) liczba wszystkich rekordów grupy 
+
+SELECT funkcja_grupowa(kolumna) FROM tabela GROUP BY kolumna_grupująca;
+
+
+miasto i średnia pensja pracowników pogrupowane miastami
+SELECT miasto, avg(pensja) FROM pracownicy GROUP BY miasto;
+
+
+SELECT AVG(pensja) FROM pracownicy; - funkcja agregująca
+
+SELECT ROUND(pensja) FROM pracownicy; - funkcja zwykła
+
+--------------------------------------------------------------------
+1. wyznacz srednią pensję wszystkich pracowników nie pracujących w londynie 
+
+SELECT AVG(pensja) FROM pracownicy 
+WHERE miasto NOT LIKE("London");
+
+
+2. wyznacz srednei pensje pracowników z podiałem na miasta a następnei wybierz te gtupy (miasta) w których srednia pensja przekrczyła 100
+
+SELECT miasto, avg(pensja) FROM pracownicy 
+GROUP BY miasto
+HAVING avg(pensja)>100;
+
+-----------------------------------------------------------------
+zad. 1
+rok produkcji i srednia cena filmu
+
+SELECT filmy.rok_produkcji, AVG(filmy.cena) AS avg FROM `filmy` 
+GROUP BY rok_produkcji ORDER BY rok_produkcji DESC;
+
+zad. 3
+liczba filmów wyprodukowanych w roku 1884
+
+SELECT COUNT(*) FROM filmy WHERE filmy.rok_produkcji LIKE(1984);
+
+zad. 4
+ilosc wyporzyczen filmu Taksowkarz
+
+SELECT COUNT(*) FROM wypozyczenia 
+JOIN kopie ON kopie.id_kopii=wypozyczenia.id_kopii 
+JOIN filmy ON filmy.id_filmu=kopie.id_filmu 
+WHERE filmy.tytul LIKE("Taksowkarz");
+
+zad. 5
+sredni czas trwanai wyporzyczenia filmu ronin do 1 po przecinku
+
+SELECT round(AVG(wypozyczenia.data_zwrotu-wypozyczenia.data_wypozyczenia),1) FROM wypozyczenia 
+JOIN kopie ON kopie.id_kopii=wypozyczenia.id_kopii 
+JOIN filmy ON filmy.id_filmu=kopie.id_filmu 
+WHERE filmy.tytul LIKE("Ronin");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
