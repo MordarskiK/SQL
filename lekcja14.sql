@@ -149,6 +149,72 @@ FOREIGN KEY(piosenki_id) REFERENCES piosenki(piosenki_id)
 )ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT charset=utf8 COLLATE=utf8_polish_ci;
 
 
-INSERT INTO wykonawcy(piosenki_id,imie) VALUES(1,'Sam')
+INSERT INTO wykonawcy(piosenki_id,imie,nazwisko) VALUES(1,'Sam','Tinnesz');
+INSERT INTO wykonawcy(piosenki_id,imie,nazwisko) VALUES(2,'King','Gnu');
+INSERT INTO wykonawcy(piosenki_id,imie,nazwisko) VALUES(3,'Andrew','Underberg');
+INSERT INTO wykonawcy(piosenki_id,imie,nazwisko) VALUES(3,'Sam','Halft');
+INSERT INTO wykonawcy(piosenki_id,imie,nazwisko) VALUES(4,'Andrew','Underberg');
+INSERT INTO wykonawcy(piosenki_id,imie,nazwisko) VALUES(4,'Sam','Halft');
+INSERT INTO wykonawcy(piosenki_id,imie) VALUES(5,'Barns');
 
 
+CREATE TABLE `gatunek_muzyczny` (
+`gatunek_muzyczny_id` INT AUTO_INCREMENT PRIMARY KEY,
+`piosenki_id` int,
+`gatunek` varchar(255) not null,
+    
+FOREIGN KEY(piosenki_id) REFERENCES piosenki(piosenki_id)    
+)ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT charset=utf8 COLLATE=utf8_polish_ci;
+
+INSERT INTO gatunek_muzyczny(piosenki_id,gatunek) VALUES(1,'bossbeat');
+INSERT INTO gatunek_muzyczny(piosenki_id,gatunek) VALUES(2,'j-pop');
+INSERT INTO gatunek_muzyczny(piosenki_id,gatunek) VALUES(3,'movie tunes');
+INSERT INTO gatunek_muzyczny(piosenki_id,gatunek) VALUES(4,'show tunes');
+INSERT INTO gatunek_muzyczny(piosenki_id,gatunek) VALUES(5,'indie rock');
+
+
+CREATE TABLE `cena` (
+`cena_id` INT AUTO_INCREMENT PRIMARY KEY,
+`piosenki_id` int,
+`cena` float not null,
+    
+FOREIGN KEY(piosenki_id) REFERENCES piosenki(piosenki_id)    
+)ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT charset=utf8 COLLATE=utf8_polish_ci;
+
+INSERT INTO cena(piosenki_id,cena) VALUES(1,30.90);
+INSERT INTO cena(piosenki_id,cena) VALUES(2,20.50);
+INSERT INTO cena(piosenki_id,cena) VALUES(3,25.99);
+INSERT INTO cena(piosenki_id,cena) VALUES(4,40.99);
+INSERT INTO cena(piosenki_id,cena) VALUES(5,50.14);
+
+
+CREATE TABLE `dostepne` (
+`dostepne_id` INT AUTO_INCREMENT PRIMARY KEY,
+`piosenki_id` int,
+`czy_dostepne` boolean not null,
+    
+FOREIGN KEY(piosenki_id) REFERENCES piosenki(piosenki_id)    
+)ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT charset=utf8 COLLATE=utf8_polish_ci;
+
+
+INSERT INTO dostepne(piosenki_id,czy_dostepne) VALUES(1,1);
+INSERT INTO dostepne(piosenki_id,czy_dostepne) VALUES(2,1);
+INSERT INTO dostepne(piosenki_id,czy_dostepne) VALUES(3,0);
+INSERT INTO dostepne(piosenki_id,czy_dostepne) VALUES(4,0);
+INSERT INTO dostepne(piosenki_id,czy_dostepne) VALUES(5,1);
+
+
+CREATE TABLE `sklep` (
+`sklep_id` int AUTO_INCREMENT PRIMARY KEY,
+`dostepne_id` int,
+`cena_id` int,
+
+FOREIGN KEY(dostepne_id) REFERENCES dostepne(dostepne_id),
+FOREIGN KEY(cena_id) REFERENCES cena(cena_id)
+)ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT charset=utf8 COLLATE=utf8_polish_ci;
+
+INSERT INTO sklep(dostepne_id,cena_id) VALUES(1,1);
+INSERT INTO sklep(dostepne_id,cena_id) VALUES(2,2);
+INSERT INTO sklep(dostepne_id,cena_id) VALUES(3,3);
+INSERT INTO sklep(dostepne_id,cena_id) VALUES(4,4);
+INSERT INTO sklep(dostepne_id,cena_id) VALUES(5,5);
