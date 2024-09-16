@@ -1,0 +1,131 @@
+jak xampp nie działa to w internecie 10.0.0.245/phpmyadmin/ uczen uczen
+
+ZEPSUTAPOGODA HASLO Z MAŁEJ
+
+serwer plikow
+\\10.0.0.1\e\_5i1
+
+w listopadzie bedzie egzamin na zaliczenie
+
+FUNKCJE AGREGUJACE POWTORZYC NA 16.09
+
+
+
+1.	Wyświetl wszystkie informacje o książkach, posortowane alfabetycznie wg nazwiska autora.
+SELECT * FROM `ksiazki` ORDER BY `ksiazki`.`nazwiskoautora` ASC;
+
+2.	Wyświetl wszystkie informacje o książkach (poza id), posortowane malejąco wg ceny.
+SELECT imieautora, nazwiskoautora, tytul, cena 
+FROM ksiazki 
+ORDER BY cena DESC;
+
+3.	Wyświetl wszystkie informacje o książkach. Zamiast standardowych nazw kolumn użyj aliasów wg klucza: idksiazki -> ID książki, imieautora -> Imię autora, itd.
+SELECT idksiazki as `ID książki`, imieautora as `Imię autora`, nazwiskoautora as `Nazwisko autora`, tytul as `tytuł książki`, cena as `Cena` FROM `ksiazki`;
+
+4.	Wyświetl wszystkie informacje o wysłanych zamówieniach.
+SELECT * FROM `zamowienia` 
+WHERE `status` = 'wyslano';
+
+5.	Wyświetl wszystkie informacje o wysłanych zamówieniach z sierpnia i września 2021 roku.
+SELECT * from zamowienia 
+where data BETWEEN "2021-08-01" and "2021-09-30";
+
+6.	Wyświetl wszystkie informacje o klientach z nazwiskiem Brodka.
+SELECT * FROM `klienci` 
+WHERE `nazwisko` LIKE 'Brodka';
+
+7.	Wyświetl wszystkie informacje o książkach, zawierających wyrażenie "php" lub „frontend” w tytule.
+SELECT * from ksiazki
+WHERE tytul LIKE "%php%" or tytul LIKE "%frontend%";
+
+8.	Wyświetl chronologicznie (od pierwszego do ostatniego) informacje o zamówieniach ze statusem „oczekiwanie”.
+SELECT * FROM zamowienia WHERE status = 'oczekiwanie' ORDER BY data ASC;
+
+9.	Wyświetl informacje o zamówieniach: imię i nazwisko klienta zamawiającego, id zamówienia oraz datę zamówienia.
+SELECT klienci.imie, klienci.nazwisko, zamowienia.idzamowienia, zamowienia.data 
+FROM klienci 
+JOIN zamowienia ON klienci.idklienta = zamowienia.idklienta;
+
+10.	Wyświetl informacje o zamówieniach: imię i nazwisko klienta zamawiającego, id zamówienia oraz tytuł zamówionej pozycji.
+SELECT klienci.imie, klienci.nazwisko, zamowienia.idzamowienia, ksiazki.tytul 
+FROM klienci 
+JOIN zamowienia ON klienci.idklienta = zamowienia.idklienta 
+JOIN ksiazki ON zamowienia.idksiazki = ksiazki.idksiazki;
+
+11.	Wyświetl imiona, nazwiska i miasta osób, które zamówiły kiedykolwiek książkę o id 5 lub 7.
+SELECT DISTINCT klienci.imie,klienci.nazwisko,klienci.miejscowosc FROM klienci
+JOIN zamowienia ON klienci.idklienta=zamowienia.idklienta
+JOIN ksiazki ON zamowienia.idksiazki=ksiazki.idksiazki
+WHERE ksiazki.idksiazki = 5 OR ksiazki.idksiazki = 7 
+
+12.	Wyświetl tytuły książek wraz z imieniem i nazwiskiem autora, które zamówiła osoba z Krakowa.
+SELECT tytul, imieautora,nazwiskoautora, miejscowosc 
+from klienci 
+join zamowienia on klienci.idklienta=zamowienia.idklienta 
+join ksiazki on zamowienia.idksiazki=ksiazki.idksiazki
+where klienci.miejscowosc="Krakow";
+
+13.	Wyświetl wszystkie informacje o zamówieniach dokonanych przez wszystkich klientów (imię i nazwisko osoby zamawiającej, id, data i status zamówienia, tytuł zamówionej książki).
+
+
+14.	Wyświetl wszystkie informacje o zamówieniach dokonanych przez klienta o nazwisku „Rutkowski” oraz „Brodka” (imię i nazwisko osoby zamawiającej, id, data i status zamówienia, tytuł zamówionej książki).
+
+15.	Wyświetl wszystkie informacje o zamówieniach dokonanych przez klienta o nazwisku „Jankowska” ułożone wg daty od najpóźniej dokonanych (imię i nazwisko osoby zamawiającej, id, data i status zamówienia, tytuł zamówionej książki).
+SELECT klienci.imie, klienci.nazwisko, zamowienia.idzamowienia, zamowienia.data, zamowienia.status 
+FROM zamowienia 
+JOIN klienci ON zamowienia.idklienta = klienci.idklienta 
+WHERE klienci.nazwisko = "Jankowska" ORDER by zamowienia.data DESC;
+
+16.	Wyświetl średnią cenę książki.
+SELECT round(AVG(ksiazki.cena),2) FROM ksiazki
+
+17.	Wyświetl informacje o ilości zamówień dokonanych przez klientów (imię, nazwisko, ilość).
+SELECT klienci.imie,klienci.nazwisko,COUNT(zamowienia.idklienta) as ilosc 
+FROM klienci JOIN zamowienia ON klienci.idklienta = zamowienia.idklienta
+GROUP BY klienci.imie  
+
+18.   	Wyświetl tytuł oraz cenę najtańszej książki.
+SELECT ksiazki.tytul, ksiazki.cena 
+FROM ksiazki 
+WHERE ksiazki.cena=(SELECT min(ksiazki.cena) FROM `ksiazki`);
+
+19.	Wyświetl imię i nazwisko klienta, który dokonał tylko jednego zamówienia.
+SELECT klienci.imie,klienci.nazwisko
+FROM klienci JOIN zamowienia ON klienci.idklienta = zamowienia.idklienta
+GROUP BY klienci.imie  
+HAVING COUNT(zamowienia.idklienta)=1
+
+20.	Wyświetl imię i nazwisko klienta, który min. dwóch zamowien.
+SELECT klienci.imie,klienci.nazwisko
+FROM klienci JOIN zamowienia ON klienci.idklienta = zamowienia.idklienta
+GROUP BY klienci.imie  
+HAVING COUNT(zamowienia.idklienta)>=2
+
+21.   Wyświetl imię i nazwisko klienta, który nigdy nie dokonał zamówienia.
+SELECT klienci.imie,klienci.nazwisko FROM klienci
+left JOIN zamowienia ON klienci.idklienta=zamowienia.idklienta
+WHERE zamowienia.idzamowienia is Null
+
+SELECT klienci.imie,klienci.nazwisko 
+FROM klienci WHERE klienci.idklienta not IN(
+    SELECT zamowienia.idklienta FROM zamowienia
+)
+
+22.   Wyświetl imiona, nazwiska i miasta osób, które zamówiły kiedykolwiek książkę o id 5 oraz 7.
+zad 11
+
+23.   Zaktualizuj cenę wszystkich książek z PHP o 15%.
+UPDATE ksiazki SET ksiazki.cena = ksiazki.cena * 1.15 WHERE ksiazki.tytul LIKE '%PHP%';
+
+24.   Zaktualizuj status zamówień na "wysłano" dla wszystkich zamówień z 2021 roku.
+UPDATE zamowienia set zamowienia.status = 'wysłano' WHERE zamowienia.data BETWEEN "2021-01-01" and "2021-12-31"
+
+UPDATE zamowienia set zamowienia.status = 'wysłano' WHERE year(zamowienia.data) = 2021
+
+25.   Dodaj do tabeli klienci kolumnę "e-mail".
+ALTER TABLE klienci
+ADD email varchar(45);
+
+26.   Dodaj dwóch nowych klientów do bazy uzupełniając wszystkie pola. 
+27.   Usuń z bazy Andrzeja D.
+DELETE FROM `klienci` WHERE idklienta = 12;
