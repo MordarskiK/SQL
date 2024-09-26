@@ -68,3 +68,70 @@ zad2
 4. GRANT SELECT, INSERT, DELETE ON ksiegarnia.klient TO 'uczen2';
 5. GRANT ALL PRIVILEGES ON ksiegarnia.zamowienia TO 'uczen2';
 6. REVOKE DELETE ON ksiegarnia.zamowienia TO 'uczen2';
+
+/////////////////////////////////////////////////////////////////////
+/* UPDATE  26-09-2024 */
+DQL – "Data Query Language" - SELECT - instrukcje
+! DML - "Data Manipulation Language" - INSERT, UPDATE, DELETE - manipulacja danymi
+! DDL - "Data Definition Language" - CREATE, ALTER, DROP - definiowanie 
+! DCL - "Data Control Language" - GRANT, REVOKE - przydzielanie
+TCL - COMMIT, ROUTEBACK, START TRANSACTION
+
+Predykaty: BETWEEN, IN, DISTINCT, EXISTS, NOT, AND, OR
+
+SELECT nazwa_kolumny from nazwa_tabeli
+WHERE EXISTS
+(SELECT ...)
+/* przykład z bazy danych sklep */ 
+SELECT producent.nazwa FROM producent 
+WHERE EXISTS(
+    	SELECT produkt.nazwa FROM produkt 
+    	WHERE produkt.producent_id = producent.id AND produkt.cena < 10
+    )
+
+////////////////////////////////////////////////
+1.
+SELECT produkt.nazwa FROM produkt
+WHERE produkt.ilosc BETWEEN 67 AND 68;
+
+2.
+SELECT produkt.nazwa, produkt.kategoria_id FROM produkt
+WHERE produkt.cena BETWEEN 100 AND 150 AND produkt.kategoria_id IN (1,5,28);
+
+3.
+SELECT DISTINCT produkt.kategoria_id FROM produkt
+WHERE produkt.nazwa LIKE "%0" AND produkt.cena > 1900;
+
+4.
+SELECT klient.miejscowosc FROM klient 
+WHERE klient.ulica LIKE "R%";
+
+5.
+SELECT pracownik.nazwisko, pracownik.numer FROM pracownik
+WHERE pracownik.telefon LIKE "6%5";
+
+6.
+SELECT transakcja.data FROM transakcja
+WHERE transakcja.pracownik_id IN (10,20) AND transakcja.klient_id IN (10,20);
+
+7.
+SELECT produkt.nazwa, produkt.cena FROM produkt
+WHERE produkt.ilosc NOT BETWEEN 2 AND 99;
+
+8.
+SELECT transakcja.data FROM transakcja
+WHERE EXISTS (
+    SELECT klient.id FROM klient
+    WHERE klient.miejscowosc LIKE "P%" AND klient.ulica LIKE "K%"
+    );
+
+///////////////////////////////////////////////
+/* Baza danych Hotel */
+CREATE DATABASE hotel;
+
+CREATE TABLE Uslugi_Wizyty (
+	Liczba_elem int,
+    Cena_jednostwowa decimal(15,2),
+    Data_od datetime,
+    Data_do datetime
+    ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
