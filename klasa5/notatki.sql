@@ -135,3 +135,10 @@ CREATE TABLE Uslugi_Wizyty (
     Data_od datetime,
     Data_do datetime
     ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+///////////////////////////////////////////////////
+/*  Update z 03-10-2024	  */
+
+"Dziedziczenie - pobiera informacje z paru tabel naraz (może być dziedziczenie wykluczające)"
+
+	
+
