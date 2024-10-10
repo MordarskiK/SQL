@@ -140,5 +140,38 @@ CREATE TABLE Uslugi_Wizyty (
 
 "Dziedziczenie - pobiera informacje z paru tabel naraz (może być dziedziczenie wykluczające)"
 
+///////////////////////////////////////////////////
+/*  Update z 10-10-2024   */
+
+SELECT oddzial.nazwa, pracownicy.nazwisko FROM oddzial
+JOIN pracownicy ON pracownicy.id_odzial = oddzial.id_odzial
+WHERE pracownicy.nazwisko BETWEEN "B%" AND "L%"
+
+SELECT oddzial.nazwa, pracownicy.nazwisko FROM oddzial
+JOIN pracownicy ON pracownicy.id_odzial = oddzial.id_odzial
+WHERE substring(pracownicy.nazwisko, 1,1) BETWEEN "B%" AND "L%"
+
+
+
+SELECT klienci.nazwisko FROM klienci
+WHERE substring(klienci.nazwisko, 2, 1) = "D" AND substring(klienci.nazwisko, -1, 1) = "a" 
 	
+SELECT klienci.nazwisko FROM klienci
+WHERE substring(klienci.nazwisko, 2) LIKE "D%a" 
+
+
+SELECT klienci.nazwisko FROM klienci
+WHERE substring(klienci.nazwisko, 2, 1) = "D" AND substring(klienci.nazwisko, -2, 1) = "a" 
+	
+SELECT klienci.nazwisko FROM klienci
+WHERE substring(klienci.nazwisko, 2) = "D%a_"
+
+
+SELECT oddzial.nazwa, pracownicy.nazwisko FROM oddzial
+JOIN pracownicy ON pracownicy.id_odzial = oddzial.id_odzial
+WHERE pracownicy.nazwisko LIKE "B%" OR pracownicy.nazwisko LIKE "L%"
+
+
+SELECT kategorie.nazwa, kategorie.opis FROM kategorie
+WHERE kategorie.opis LIKE "%_%"      /* _ (podłoga) to dowolny znak */
 
