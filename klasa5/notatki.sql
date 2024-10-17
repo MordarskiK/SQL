@@ -175,3 +175,32 @@ WHERE pracownicy.nazwisko LIKE "B%" OR pracownicy.nazwisko LIKE "L%"
 SELECT kategorie.nazwa, kategorie.opis FROM kategorie
 WHERE kategorie.opis LIKE "%_%"      /* _ (podłoga) to dowolny znak */
 
+////////////////////////////////////////////////////////////////////
+/*  Update z 17-10-2024  */
+
+"Encja - tabela (obiekt który można zdefiniować)
+Atrytut encji - definicja
+Krotka - rekord
+Dane pierwotne - dane które muszą zostać wprowadzone (data urodzenia)
+Dane pochodne - wyliczane na podstawie danych pierwotnych (wiek)
+system zarządzania bazą danych - system zarządzający bazą i urzytkownikami
+Struktura bazy danych - budowa bazy danych
+Model hierarchiczny - 1 tablica (mogą być duplikaty)
+Integralność danych - śpójność danych, gwarantuje że dane nie zostaną zmienione lub usunięte bez odpowiednich uprawnień
+Integralnośc semantyczność - dopuszcza do kolumny tylko dane zgodne (numer do int, text do string) 
+Create schema / create database - TO SAMO
+integralność encji - każda encja musi mieć klucz i nie może się powtarzać
+referencje - związki między tabelami
+funkcje systemu zarządzania bazą danych - tworzenie struktur baz danych, wykonywanie operacji CRUD (Create, Read, Update, Delete), obsługa zapytań (selekcjonowanie danych), generowanie raportów i zestawień, administracja bazą danych
+
+iloczyn kartezjański - tabela która ma w sobie połączenie tabel 
+
+normalizacja baz danych - proces który ma za zadanie usuwanie kopii danych 
+Postacie normalizacji (Normal Forms - NF):
+  - przyrównanie do schematu
+celem normalizacji jest usuwanie anomalii
+
+1NF - kiedy wiersz ma postac w której kolumna ma tylko 1 wartość a dane są atomowe (dane są niepodzielne w każdej kolumnie), musi zawierać klucz główny
+2NF - 1NF + tabela zawiera dane tylko konkretne do obiektu, tabele łączą się relacjami
+3NF - 2NF + każdy element nie kluczowy jest tylko zależny od klucza głównego (nie kluczowa kolumna nie może zależeć od nie kluczowej kolumny) 
+"
