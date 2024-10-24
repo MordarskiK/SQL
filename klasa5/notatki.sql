@@ -204,3 +204,144 @@ celem normalizacji jest usuwanie anomalii
 2NF - 1NF + tabela zawiera dane tylko konkretne do obiektu, tabele łączą się relacjami
 3NF - 2NF + każdy element nie kluczowy jest tylko zależny od klucza głównego (nie kluczowa kolumna nie może zależeć od nie kluczowej kolumny) 
 "
+
+///////////////////////////////////////////////////////////////////
+/*  Update 24-10-2024  */
+
+CREATE DATABASE ksiegarnia;
+
+CREATE TABLE wydawnictwo (
+    id_wydawnictwa int not null AUTO_INCREMENT,
+    nazwa varchar(50),
+    PRIMARY KEY (id_wydawnictwa)
+);
+
+CREATE TABLE autor (
+    id_autora int not null AUTO_INCREMENT,
+    nazwisko varchar(50),
+    imie varchar(50),
+    PRIMARY KEY (id_autora)
+);
+
+CREATE TABLE ksiazki (
+	id_ksiazki int not null AUTO_INCREMENT,
+    tytul varchar(100),
+    id_autora int,
+    cena decimal(50,2),
+    id_wydawnictwa int,
+    rok_wydania int,
+    PRIMARY KEY (id_ksiazki),
+    FOREIGN KEY (id_autora) REFERENCES autor(id_autora)
+    	ON UPDATE CASCADE
+    	ON DELETE SET NULL,
+    FOREIGN KEY (id_wydawnictwa) REFERENCES wydawnictwo(id_wydawnictwa)
+    	ON UPDATE CASCADE
+    	ON DELETE SET NULL
+);
+
+CREATE TABLE faktura (
+	id_faktury int not null AUTO_INCREMENT,
+    nr_faktury varchar(50),
+    sposob_platnosci varchar(50),
+    data_wystawienia datetime,
+    PRIMARY KEY (id_faktury)
+);
+
+CREATE TABLE klient (
+	id_klienta int not null AUTO_INCREMENT,
+   	imie varchar(50),
+    nazwisko varchar(50),
+    miejscowosc varchar(50),
+    kod_pocztowy varchar(6),
+    ulica varchar(50),
+    nr_domu varchar(7),
+    telefon varchar(12),
+    e_mail varchar(50),
+    PRIMARY KEY (id_klienta)
+);
+
+CREATE TABLE zamowienia (
+	id_zamowienia int not null AUTO_INCREMENT,
+	id_klienta int,
+    data_zamowienia datetime,
+    data_wyslania datetime,
+    koszt_wysylki decimal(50,2),
+    id_faktury int,
+    PRIMARY KEY (id_zamowienia),
+    FOREIGN KEY (id_klienta) REFERENCES klient(id_klienta)
+    	ON UPDATE CASCADE
+    	ON DELETE SET NULL,
+    FOREIGN KEY (id_faktury) REFERENCES faktura(id_faktury)
+    	ON UPDATE CASCADE
+    	ON DELETE SET NULL
+);
+
+CREATE TABLE szczegoly_zamowienia (
+	id_zamowienia int,
+    id_ksiazki int,
+    ilosc int,
+    FOREIGN KEY (id_zamowienia) REFERENCES zamowienia(id_zamowienia)
+    	ON UPDATE CASCADE
+    	ON DELETE SET NULL,
+    FOREIGN KEY (id_ksiazki) REFERENCES ksiazki(id_ksiazki)
+    	ON UPDATE CASCADE
+    	ON DELETE SET NULL
+);
+
+INSERT INTO autor(imie,nazwisko) VALUES("J.K.","Rowling");
+INSERT INTO autor(imie,nazwisko) VALUES("Albert","Camus");
+INSERT INTO autor(imie,nazwisko) VALUES("Slawonir","Mrozek");
+INSERT INTO autor(imie,nazwisko) VALUES("Boleslaw","Prus");
+INSERT INTO autor(imie,nazwisko) VALUES("Adam","Mickiewicz");
+
+INSERT INTO wydawnictwo(nazwa) VALUES("Greg");
+INSERT INTO wydawnictwo(nazwa) VALUES("Helion");
+
+INSERT INTO ksiazki(tytul,cena,rok_wydania,id_autora,id_wydawnictwa) VALUES("Harry Potter",13.99,2005,1,2);
+INSERT INTO ksiazki(tytul,cena,rok_wydania,id_autora,id_wydawnictwa) VALUES("Dżuma",14.20,1947,2,2);
+INSERT INTO ksiazki(tytul,cena,rok_wydania,id_autora,id_wydawnictwa) VALUES("Tango",11.25,1964,3,2);
+INSERT INTO ksiazki(tytul,cena,rok_wydania,id_autora,id_wydawnictwa) VALUES("Lalka",10.18,1890,4,1);
+INSERT INTO ksiazki(tytul,cena,rok_wydania,id_autora,id_wydawnictwa) VALUES("Dziady",16,1832,5,1);
+
+INSERT INTO faktura(nr_faktury,sposob_platnosci,data_wystawienia) VALUES ("1005AB","karta","2024-01-19");
+INSERT INTO faktura(nr_faktury,sposob_platnosci,data_wystawienia) VALUES ("287OP","gotowka","2024-09-07");
+INSERT INTO faktura(nr_faktury,sposob_platnosci,data_wystawienia) VALUES ("GR501","karta","2024-11-16");
+
+INSERT INTO klient(imie, nazwisko, miejscowosc, kod_pocztowy, ulica, nr_domu,telefon, e_mail) 
+VALUES ("Jan","Kowalski","Zabrze","42-990","Składowa","2","123456789","mail@mail.pl");
+INSERT INTO klient(imie, nazwisko, miejscowosc, kod_pocztowy, ulica, nr_domu,telefon, e_mail) 
+VALUES ("Kuba","Kubowski","Warszawa","41-790","Klinowa","32","789456132","kuba@mail.pl");
+INSERT INTO klient(imie, nazwisko, miejscowosc, kod_pocztowy, ulica, nr_domu,telefon, e_mail) 
+VALUES ("Joanna","Prawa","Gliwice","12-321","Porowa","1","852963741","asia@mail.pl");
+
+INSERT INTO zamowienia(data_zamowienia,data_wyslania,id_klienta,id_faktury,koszt_wysylki) VALUES ("2024-10-11","2024-10-15",1,7,14.99);
+INSERT INTO zamowienia(data_zamowienia,data_wyslania,id_klienta,id_faktury,koszt_wysylki) VALUES ("2024-09-01","2024-09-02",2,8,12.25);
+INSERT INTO zamowienia(data_zamowienia,data_wyslania,id_klienta,id_faktury,koszt_wysylki) VALUES ("2024-01-09","2024-01-30",3,9,9.99);
+
+INSERT INTO szczegoly_zamowienia(id_ksiazki, id_zamowienia,ilosc) VALUES(1,2,2);
+INSERT INTO szczegoly_zamowienia(id_ksiazki, id_zamowienia,ilosc) VALUES(3,1,1);
+INSERT INTO szczegoly_zamowienia(id_ksiazki, id_zamowienia,ilosc) VALUES(5,3,5);
+
+-------------------------------------------------------------
+ALTER TABLE tabela1 RENAME rzeczy; / ALTER TABLE tabela1 RENAME TO rzeczy;
+ALTER TABLE tabela1 ADD kolumna int NOT NULL DEFAULT "18";
+ALTER TABLE tabela1 ADD (wiek int, plec varchar(1));
+ALTER TABLE tabela1 MODIFY plec varchar(20) not NULL;
+ALTER TABLE tabela1 CHANGE wiek ilelat int;
+ALTER TABLE tabela1 DROP COLUMN ilelat;
+
+ALTER TABLE tabela1 DROP COLUMN ilelat
+TRUNCATE;
+
+ALTER DATABASE nazwa_bazy CHARACTER SET utf8 COLLATE rodzaj_kodowania
+ALTER TABLE nazwa_tabeli CHARACTER SET utf8 COLLATE rodzaj_kodowania  -- moga miec inne rodzaje kodowania 
+
+ALTER TABLE nazwa_tabeli CONVERT TO CHARACTER SET utf8 COLLATE rodzaj_kodowania -- convert przeconvertuje a nie zmieni wiec nie ma strat
+
+ALTER TABLE rzeczy MODIFY id NOT null, ADD PRIMARY KEY (id)
+
+
+
+
+
+
