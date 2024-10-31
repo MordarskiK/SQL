@@ -340,8 +340,64 @@ ALTER TABLE nazwa_tabeli CONVERT TO CHARACTER SET utf8 COLLATE rodzaj_kodowania 
 
 ALTER TABLE rzeczy MODIFY id NOT null, ADD PRIMARY KEY (id)
 
+//////////////////////////////////////////////////////////////////
+/*  Update z 31-10-2024  */
 
+"ENUM - zabezpieczenie aby mogły być wpisywane tylko podane wartości
+plec ENUM ('M','K');  /  plec CHAR(3) CHECK (plec in ('M','K'));
 
+ALTER TABLE person ADD wiek int AFTER kom1;  - dodanie komurki po kom1
+ALTER TABLE person ADD wiek int FIRST;  - dodanie komurki na początku
 
+ALTER TABLE person DROP PRIMARY KEY;
 
+ALTER TABLE person INDEX(wiek, kolor_oczu)  - klucz kompozytowy / złożony
+ALTER TABLE person DROP INDEX(wiek, kolor_oczu)  
+"
+	
+ALTER TABLE klient ADD plec ENUM('M','K') AFTER nazwisko;
 
+UPDATE klient SET plec = 'M'
+WHERE klient.id_klienta = 1;
+-- brak błędu
+
+UPDATE klient SET plec = 'N'
+WHERE klient.id_klienta = 2;
+-- wartosc nie została zapisana
+
+----- NOTATKA ------
+Po wykonaniu polecenia UPDATE które zmienia id_zamowienia w tabeli zamowienia
+
+UPDATE zamowienia SET id_zamowienia = 1
+WHERE id_zamowienia = 3;
+
+wartość id_zamowienia również znmieniła się w tabeli szczegoły_zamowienia poprzez urzycie CASCADE
+
+---------------------------------------------------------------
+
+Po usunięciu z tabeli wydawnictwo wydawnictwa o id 1
+
+DELETE FROM wydawnictwo 
+WHERE wydawnictwo.id_wydawnictwa = 1
+
+W tabeli ksiazki w kolumnie id_wydawnictwa wartość 1 została zmieniona na NULL
+
+---------------------------------------------------------------
+
+Po dodaniu do tabeli klient kolumny plec z użyciem ENUM
+
+ALTER TABLE klient ADD plec ENUM('M','K') AFTER nazwisko;
+
+oraz dodaniu wartości do komlny plec przy urzyciu komend 
+
+(Wpisanie poprawnej wartości)
+UPDATE klient SET plec = 'M'
+WHERE klient.id_klienta = 1;
+
+Nie ma błędu i wartość zostaje poprawnie zapisana
+
+(Wpisanie błędnej wartości)
+UPDATE klient SET plec = 'N'
+WHERE klient.id_klienta = 2;
+
+Powstaje błąd - wartość w polu plec zostaje zmieniona na pustą
