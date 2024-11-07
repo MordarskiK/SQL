@@ -401,3 +401,98 @@ UPDATE klient SET plec = 'N'
 WHERE klient.id_klienta = 2;
 
 Powstaje błąd - wartość w polu plec zostaje zmieniona na pustą
+
+///////////////////////////////////////////////////////////////////////////////
+/*  Update z 07-11-2024  */
+1. Zaloguj się na konto ROOT.
+2. Utwórz super-usera z pełnymi prawami do wszystkiego (nazwa to superman, hasło to qwerty).
+
+CREATE USER 'superman'@'localhost' identified BY 'qwerty';
+GRANT all PRIVILEGES ON *.* TO 'superman'@'localhost' WITH GRANT OPTION;
+
+3. Zaloguj się na konto superman.
+
+w cmd:
+cd c:/xampp/mysql/bin
+mysql -u superman -p
+'qwerty'
+
+4. Utwórz bazę "robale"
+
+CREATE DATABASE robale;
+
+5. Do bazy dodaj 3 tabele (kopiuj-wklej):
+	Create table male (idm int auto_increment primary key, 
+				mrozmiar varchar(45),
+				mgatunek varchar (45));
+	Create table srednie (ids int auto_increment primary key, 
+				srozmiar varchar(45),
+				sgatunek varchar (45));
+	Create table duze (idd int auto_increment primary key, 
+				drozmiar varchar(45),
+				dgatunek varchar (45));
+6. Do tabel dodaj rekordy (kopiuj-wklej):
+	Insert into male values ('','do20cm','jednonog');
+	Insert into male values ('','do25cm','dwunog');
+	Insert into male values ('','do30cm','trojnog');
+	Insert into srednie values ('','do40cm','braknog');
+	Insert into srednie values ('','do45cm','dwunog');
+	Insert into srednie values ('','do50cm','czworonog');
+	Insert into duze values ('','do60cm','stonog');
+	Insert into duze values ('','do65cm','braknog');
+	Insert into duze values ('','do70cm','wolnyodnog');
+7. Utwórz użytkownikow (hasło do wszystkich to qwerty) i nadaj im następujące uprawnienia:
+	7.1. admin_robale mający pełne praca do całej bazy robale,
+
+CREATE USER 'admin_robale'@'localhost' identified BY 'qwerty';
+GRANT ALL PRIVILEGES ON robale.* TO 'admin_robale'@'localhost';
+
+	7.2. admin_male mający pełne prawa do tabeli male,
+
+CREATE USER 'admin_male'@'localhost' identified BY 'qwerty';
+GRANT ALL PRIVILEGES ON robale.male TO 'admin_male'@'localhost';	
+
+	7.3. admin_srednie mający pełne prawa do tabeli srednie,
+
+CREATE USER 'admin_srednie'@'localhost' identified BY 'qwerty';
+GRANT ALL PRIVILEGES ON robale.srednie TO 'admin_srednie'@'localhost';
+
+	7.4. admin_duze mający pełne prawa do tabeli duze,
+
+CREATE USER 'admin_duze'@'localhost' identified BY 'qwerty';
+GRANT ALL PRIVILEGES ON robale.duze TO 'admin_duze'@'localhost';
+
+	7.5. maniek mający prawo do wyświetlania danych z tabeli male,
+
+CREATE USER 'maniek'@'localhost' identified BY 'qwerty';
+GRANT SELECT ON robale.male TO 'maniek'@'localhost';
+
+	7.6. jozek mający prawo do dodawania, usuwania oraz wyswietlania danych z tabeli srednie,
+
+CREATE USER 'jozek'@'localhost' identified BY 'qwerty';
+GRANT INSERT,DELETE,SELECT ON robale.srednie TO 'jozek'@'localhost';
+
+	7.7. bronek mający prawo do tworznia i aktualizowania tabel w całej bazie oraz do wyświetlania danych z tabeli male i srednie.
+
+CREATE USER 'bronek'@'localhost' identified BY 'qwerty';
+GRANT CREATE,UPDATE ON robale.* TO 'bronek'@'localhost';
+GRANT SELECT ON robale.male TO 'bronek'@'localhost';
+GRANT SELECT ON robale.srednie TO 'bronek'@'localhost';
+
+FLUSH PRIVILEGES;
+
+8. Utwórz rolę pegasus. 
+
+CREATE role pegasus;
+
+9. Nadaj roli pegasus uprawnienia do wyświetlania i aktualizowania zawartości tabel w bazie robale.
+
+GRANT SELECT,UPDATE ON robale.* TO pegasus;
+
+10. Utwórz użytkowników m1 oraz m2 (hasło dla oby to qwerty).
+
+CREATE USER 'm1'@'localhost' identified BY 'qwerty';
+CREATE USER 'm2'@'localhost' identified BY 'qwerty';
+
+11. Dodaj użytkowników m1 oraz m2 do roli pegasus i aktywuj rolę.
+----------------------------------------------------------------------------------------
